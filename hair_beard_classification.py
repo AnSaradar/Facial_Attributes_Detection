@@ -28,12 +28,8 @@ def get_labels(pred):
 
 def hair_beard_detector(image):
     
-    image = tf.io.read_file('portrait-young-handsome-man-posing.jpg')
-
-    image = tf.io.decode_jpeg(contents=image, channels=3)
-    image = tf.cast(image, tf.float32)
-    image = tf.divide(image, 255.)
-    image = tf.image.resize(image, size=(112, 112))
+    image = image.astype(float) / 255.0
+    image = cv2.resize(image, (112, 112))
     converted_image = image[np.newaxis, ...]
     pred_labels = model.predict(converted_image)
     reshaped_array = pred_labels.reshape(40)
