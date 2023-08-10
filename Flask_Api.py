@@ -8,6 +8,7 @@ import pickle
 from glass_detector import glass_detection
 from skin_color_detector import skin_color_detection
 from gender_classification import predict_gender
+from hair_beard_classification import hair_beard_detector
 import json
 from logging import FileHandler,WARNING
 import tensorflow as tf
@@ -27,8 +28,7 @@ def predict():
     print('1')
     
     image = request.files['image']
-    file_content = image.read()
-    decoded_content = tf.io.read_file(file_content)
+
 
     pil_image = Image.open(image)
 
@@ -43,19 +43,23 @@ def predict():
     results = face_mesh.process(cv2_image)
 
     face = results.multi_face_landmarks[0].landmark
-    print('2')
+
     edges , glasses_prediction = glass_detection(cv2_image,face)
-    cv2.imwrite('edges.jpg',edges)
-    print('glasses_prediction')
+
     gender_prediction = predict_gender(cv2_image)
+
     skin_color_prediction = skin_color_detection(cv2_image,face)
     skin_color_prediction = skin_color_prediction.tolist()
     skin_color_prediction = json.dumps(skin_color_prediction)
-    print(skin_color_prediction)
+
+    hair , beard  = hair_beard_detector(cv2_image)
+    
     predictions = {
         'glasses': glasses_prediction,
         'skin_color_rgb':skin_color_prediction,
-        'gender':gender_prediction
+        'gender':gender_prediction,
+        'hair_color':hair,
+        'beard':beard
     }
 
     return jsonify(predictions)

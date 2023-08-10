@@ -23,7 +23,7 @@ def get_labels(pred):
 
     features = {'Hair':hair[max_hair_index],'Beard':beard}
     
-    return features
+    return hair[max_hair_index],beard
 
 
 def hair_beard_detector(image):
