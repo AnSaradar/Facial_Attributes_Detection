@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 def glass_detection(image, face):
     nose_bridge_x = []
     nose_bridge_y = []
-    for i in  [9,94,245,465]:
+    for i in  [9,8,245,465]:
         x = int(face[i].x * image.shape[1])
         y = int(face[i].y * image.shape[0])
         nose_bridge_x.append(x)
